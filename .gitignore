@@ -1,0 +1,11 @@
+node_modules/
+.claude/
+
+# Capturas de desarrollo
+reference.png
+result.png
+result_*.png
+ref_*.png
+res_*.png
+capture.js
+sec_*.png

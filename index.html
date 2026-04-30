@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Distrito PC</title>
+  <link rel="icon" type="image/jpeg" href="favicon.jpg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <script>
+    tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } }
+  </script>
+  <style>
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: #0b0b0b;
+    }
+
+    .hero-gradient {
+      background:
+        radial-gradient(ellipse 80% 75% at 50% 0%, rgba(0, 80, 255, 0.55) 0%, transparent 80%),
+        linear-gradient(rgba(11, 11, 11, 0.92), rgba(11, 11, 11, 0.92)),
+        url('fotos/fondo.png') center center / cover no-repeat;
+    }
+
+    .card {
+      background: #111111;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+    }
+
+    .underline-accent {
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 255, 255, 0.5);
+      text-underline-offset: 4px;
+    }
+
+    .nav-btn {
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: transparent;
+      color: white;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .hero-btn {
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: transparent;
+      color: white;
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .hero-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .dot {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+    }
+
+    /* ── Formulario de contacto ── */
+    .form-label {
+      display: block;
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: #0d0d0d;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: white;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-sizing: border-box;
+    }
+
+    .form-input:focus {
+      border-color: rgba(0, 102, 255, 0.7);
+      box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.12);
+    }
+
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.18);
+    }
+
+    .form-input.input-error {
+      border-color: rgba(239, 68, 68, 0.5);
+    }
+
+    .form-select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2 4l4 4 4-4' stroke='rgba(255,255,255,0.35)' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 38px;
+      cursor: pointer;
+      color-scheme: dark;
+    }
+
+    .form-select option {
+      background: #111111;
+      color: white;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 108px;
+    }
+
+    .form-error {
+      display: block;
+      color: #f87171;
+      font-size: 12px;
+      margin-top: 5px;
+      min-height: 17px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: rgba(0, 102, 255, 0.12);
+      border: 1px solid rgba(0, 102, 255, 0.5);
+      color: white;
+      border-radius: 10px;
+      padding: 14px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+      letter-spacing: 0.02em;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      background: rgba(0, 102, 255, 0.22);
+      border-color: rgba(0, 102, 255, 0.75);
+      box-shadow: 0 0 18px rgba(0, 102, 255, 0.3);
+    }
+
+    .submit-btn:active:not(:disabled) {
+      transform: scale(0.99);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+
+<body class="text-white overflow-x-hidden">
+
+  <!-- Navbar -->
+  <nav
+    style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:20px 40px;background:rgba(11,11,11,0.85);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.05);">
+    <a href="#" style="display:flex;align-items:center;text-decoration:none;">
+      <img src="logo.png" alt="Distrito PC" style="height:64px;width:auto;">
+    </a>
+    <div style="display:flex;align-items:center;gap:32px;">
+      <a href="#" style="color:rgba(255,255,255,0.6);font-size:14px;text-decoration:none;">Blog</a>
+      <button class="nav-btn" data-contact>Contactar</button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero-gradient"
+    style="position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 24px 0;overflow:hidden;">
+    <!-- Scattered dots -->
+    <div style="position:absolute;inset:0;pointer-events:none;">
+      <div class="dot" style="top:12%;left:8%;"></div>
+      <div class="dot" style="top:28%;left:15%;opacity:0.4;"></div>
+      <div class="dot" style="top:45%;left:4%;"></div>
+      <div class="dot" style="top:18%;right:12%;"></div>
+      <div class="dot" style="top:38%;right:7%;opacity:0.4;"></div>
+      <div class="dot" style="top:65%;left:10%;opacity:0.3;"></div>
+      <div class="dot" style="top:55%;right:18%;"></div>
+      <div class="dot" style="top:22%;left:42%;opacity:0.4;"></div>
+      <div class="dot" style="top:75%;right:25%;opacity:0.3;"></div>
+      <div class="dot" style="top:8%;left:55%;"></div>
+      <div class="dot" style="top:72%;left:30%;"></div>
+      <div class="dot" style="top:85%;right:12%;opacity:0.4;"></div>
+    </div>
+
+    <div style="position:relative;z-index:10;max-width:860px;">
+      <h1 style="font-size:66px;font-weight:800;line-height:1.05;letter-spacing:-2px;color:white;margin-bottom:24px;">
+        Descubre el poder de la<br>informática inteligente
+      </h1>
+      <p style="color:rgba(255,255,255,0.55);font-size:18px;line-height:1.65;max-width:440px;margin:0 auto 32px;">
+        Di adiós a los equipos obsoletos. Ya seas particular o empresa, en Distrito PC gestionamos tus necesidades
+        tecnológicas como un profesional. Simple. Directo. Y sin complicaciones.
+      </p>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+        <button class="hero-btn" data-contact>Contactar ahora</button>
+        <a href="#"
+          style="display:flex;flex-direction:column;align-items:center;gap:6px;color:rgba(255,255,255,0.4);font-size:13px;text-decoration:none;margin-top:4px;">
+          Saber más
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 2v10M2 7l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Carrusel -->
+    <div style="position:relative;z-index:10;margin-top:64px;width:100%;max-width:1000px;">
+      <div class="card" style="border-radius:16px 16px 0 0;overflow:hidden;position:relative;height:320px;">
+
+        <!-- Slides -->
+        <div id="carousel" style="display:flex;height:100%;transition:transform 0.5s ease;">
+
+          <!-- Slide 1 -->
+          <img src="fotos/foto1.png" alt="Slide 1" style="width:100%;height:320px;object-fit:cover;flex-shrink:0;">
+          <!-- Slide 2 -->
+          <img src="fotos/foto2.png" alt="Slide 2" style="width:100%;height:320px;object-fit:cover;flex-shrink:0;">
+          <!-- Slide 3 -->
+          <img src="fotos/foto3.png" alt="Slide 3" style="width:100%;height:320px;object-fit:cover;flex-shrink:0;">
+          <!-- Slide 4 -->
+          <img src="fotos/foto4.png" alt="Slide 4" style="width:100%;height:320px;object-fit:cover;flex-shrink:0;">
+
+        </div>
+
+        <!-- Flecha izquierda -->
+        <button onclick="moveCarousel(-1)"
+          style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.15);color:white;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;transition:background 0.2s;"
+          onmouseover="this.style.background='rgba(0,0,0,0.8)'" onmouseout="this.style.background='rgba(0,0,0,0.5)'">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M10 3L5 8l5 5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+
+        <!-- Flecha derecha -->
+        <button onclick="moveCarousel(1)"
+          style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.15);color:white;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;transition:background 0.2s;"
+          onmouseover="this.style.background='rgba(0,0,0,0.8)'" onmouseout="this.style.background='rgba(0,0,0,0.5)'">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M6 3l5 5-5 5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+
+        <!-- Puntos -->
+        <div id="dots"
+          style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:10;">
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const total = 4;
+      let current = 0;
+      let timer;
+
+      const carousel = document.getElementById('carousel');
+      const dotsContainer = document.getElementById('dots');
+
+      // Crear puntos
+      for (let i = 0; i < total; i++) {
+        const dot = document.createElement('div');
+        dot.onclick = () => goTo(i);
+        dot.style.cssText = 'width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;transition:background 0.2s;';
+        dotsContainer.appendChild(dot);
+      }
+
+      function updateDots() {
+        [...dotsContainer.children].forEach((d, i) => {
+          d.style.background = i === current ? 'white' : 'rgba(255,255,255,0.4)';
+          d.style.width = i === current ? '18px' : '6px';
+          d.style.borderRadius = '4px';
+        });
+      }
+
+      function goTo(n) {
+        current = (n + total) % total;
+        carousel.style.transform = `translateX(-${current * 100}%)`;
+        updateDots();
+        resetTimer();
+      }
+
+      function moveCarousel(dir) { goTo(current + dir); }
+
+      function resetTimer() {
+        clearInterval(timer);
+        timer = setInterval(() => goTo(current + 1), 4000);
+      }
+
+      updateDots();
+      resetTimer();
+    </script>
+  </section>
+
+  <!-- Who said section -->
+  <section style="padding:160px 40px;max-width:1280px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:96px;align-items:start;">
+      <div>
+        <h2 style="font-size:50px;font-weight:800;line-height:1.1;letter-spacing:-1px;color:white;">
+          ¿Quién dijo que la tecnología tiene que ser complicada?
+        </h2>
+      </div>
+      <div style="padding-top:8px;">
+        <p style="color:rgba(255,255,255,0.55);font-size:15px;line-height:1.75;">
+          Con Distrito PC, gestionar tus necesidades tecnológicas es sencillo, eficaz y sin complicaciones. Nuestra
+          experiencia pone claridad en tus decisiones de compra, simplifica el proceso de renovación de equipos y pone
+          en tus manos el poder de la informática avanzada. <span style="color:white;font-weight:500;">Di adiós a las
+            hojas de cálculo y a las herramientas diseñadas en los 80.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Everything you need section -->
+  <section style="padding-bottom:160px;padding-left:40px;padding-right:40px;max-width:1280px;margin:0 auto;">
+    <div style="margin-bottom:56px;">
+      <h2 style="font-size:50px;font-weight:800;line-height:1.1;letter-spacing:-1px;color:white;margin-bottom:20px;">
+        Todo lo que necesitas.<br>Nada más.
+      </h2>
+      <p style="color:rgba(255,255,255,0.55);font-size:15px;line-height:1.75;max-width:520px;">
+        Equipos y servicios tecnológicos en un solo lugar. Descubre una <span style="color:white;font-weight:600;"
+          class="underline-accent">solución flexible</span> que hace que cada tarea sea un juego de niños.
+      </p>
+    </div>
+
+    <!-- Row 1: 3 cards -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px;">
+
+      <!-- Card 1 -->
+      <div class="card" style="padding:20px;display:flex;flex-direction:column;">
+        <div
+          style="border-radius:10px;overflow:hidden;margin-bottom:20px;height:220px;background:#1a1a1a;flex-shrink:0;">
+          <img src="fotos/cuadro2.png" alt="Catálogo" style="width:100%;height:100%;object-fit:cover;display:block;">
+        </div>
+        <h3 style="color:white;font-weight:600;font-size:14px;margin-bottom:8px;">Todo a tu alcance</h3>
+        <p style="color:rgba(255,255,255,0.45);font-size:13px;line-height:1.6;">Todos nuestros equipos y servicios en un
+          solo lugar para darte respuestas rápidas y ayudarte a tomar decisiones al instante.</p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card" style="padding:20px;display:flex;flex-direction:column;">
+        <div
+          style="border-radius:10px;overflow:hidden;margin-bottom:20px;height:220px;background:#1a1a1a;flex-shrink:0;">
+          <img src="fotos/cuadro3.png" alt="Tienda Online"
+            style="width:100%;height:100%;object-fit:cover;display:block;">
+        </div>
+        <h3 style="color:white;font-weight:600;font-size:14px;margin-bottom:8px;">Compra en tiempo real</h3>
+        <p style="color:rgba(255,255,255,0.45);font-size:13px;line-height:1.6;">Consulta disponibilidad y gestiona tus
+          pedidos desde cualquier lugar con nuestra tienda online y aplicación móvil. Porque ya es 2025.</p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card" style="padding:20px;display:flex;flex-direction:column;">
+        <div
+          style="border-radius:10px;overflow:hidden;margin-bottom:20px;height:220px;background:#1a1a1a;flex-shrink:0;">
+          <img src="fotos/cuadro1.png" alt="Alertas" style="width:100%;height:100%;object-fit:cover;display:block;">
+        </div>
+        <h3 style="color:white;font-weight:600;font-size:14px;margin-bottom:8px;">Alertas de stock importantes</h3>
+        <p style="color:rgba(255,255,255,0.45);font-size:13px;line-height:1.6;">Elige las notificaciones que necesitas y
+          recíbelas por email o mensaje. Revisa y actúa con un solo clic.</p>
+      </div>
+    </div>
+
+    <!-- Row 2: 2 cards -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+
+      <!-- Card 4: Brands -->
+      <div class="card" style="padding:20px;">
+        <div
+          style="border-radius:10px;overflow:hidden;margin-bottom:20px;height:220px;background:#111111;display:flex;align-items:center;justify-content:center;">
+          <div
+            style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;padding:16px;width:100%;justify-items:center;align-items:center;">
+            <div
+              style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(255,255,255,0.65);font-weight:700;">
+              HP</div>
+            <div
+              style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:8px;color:rgba(255,255,255,0.65);font-weight:700;">
+              DELL</div>
+            <div
+              style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:7px;color:rgba(255,255,255,0.65);font-weight:700;">
+              LNVO</div>
+            <div
+              style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:8px;color:rgba(255,255,255,0.65);font-weight:700;">
+              ASUS</div>
+            <div
+              style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(255,255,255,0.65);font-weight:700;">
+              MSI</div>
+            <div
+              style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:8px;color:rgba(255,255,255,0.65);font-weight:700;">
+              ACER</div>
+            <div
+              style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:8px;color:rgba(255,255,255,0.65);font-weight:700;">
+              AMD</div>
+            <div
+              style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:7px;color:rgba(255,255,255,0.65);font-weight:700;">
+              INTEL</div>
+            <div
+              style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:7px;color:rgba(255,255,255,0.65);font-weight:700;">
+              NVDIA</div>
+            <div
+              style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:7px;color:rgba(255,255,255,0.65);font-weight:700;">
+              SAMS</div>
+            <div
+              style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(255,255,255,0.65);font-weight:700;">
+              WD</div>
+            <div
+              style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:7px;color:rgba(255,255,255,0.65);font-weight:700;">
+              CORS</div>
+            <div
+              style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:7px;color:rgba(255,255,255,0.65);font-weight:700;">
+              GIGB</div>
+            <div
+              style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:7px;color:rgba(255,255,255,0.65);font-weight:700;">
+              RAZR</div>
+            <div
+              style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:7px;color:rgba(255,255,255,0.65);font-weight:700;">
+              SEAG</div>
+          </div>
+        </div>
+        <h3 style="color:white;font-weight:600;font-size:14px;margin-bottom:8px;">Conecta con todas las marcas</h3>
+        <p style="color:rgba(255,255,255,0.45);font-size:13px;line-height:1.6;">Trabajamos con las principales marcas
+          del sector: equipos, componentes, periféricos y consumibles de primera línea.</p>
+      </div>
+
+      <!-- Card 5: Command palette -->
+      <div class="card" style="padding:20px;">
+        <div
+          style="border-radius:10px;overflow:hidden;margin-bottom:20px;height:220px;background:#0d0d0d;padding:20px;">
+          <div style="background:#1a1a1a;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;">
+            <p style="color:rgba(255,255,255,0.35);font-size:12px;margin-bottom:12px;">¿Qué necesitas hoy?</p>
+            <div
+              style="font-size:10px;color:rgba(255,255,255,0.35);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.06em;">
+              Más usado</div>
+            <div
+              style="display:flex;align-items:center;justify-content:space-between;padding:7px 9px;border-radius:6px;background:rgba(255,255,255,0.05);margin-bottom:3px;">
+              <span style="color:rgba(255,255,255,0.75);font-size:12px;">Ver equipos disponibles</span>
+              <span
+                style="color:rgba(255,255,255,0.3);font-size:10px;background:rgba(255,255,255,0.08);padding:2px 7px;border-radius:4px;">V</span>
+            </div>
+            <div
+              style="display:flex;align-items:center;justify-content:space-between;padding:7px 9px;border-radius:6px;margin-bottom:3px;">
+              <span style="color:rgba(255,255,255,0.5);font-size:12px;">Ver todos los servicios</span>
+              <span
+                style="color:rgba(255,255,255,0.3);font-size:10px;background:rgba(255,255,255,0.08);padding:2px 7px;border-radius:4px;">S</span>
+            </div>
+            <div
+              style="display:flex;align-items:center;justify-content:space-between;padding:7px 9px;border-radius:6px;margin-bottom:12px;">
+              <span style="color:rgba(255,255,255,0.5);font-size:12px;">Gestionar mi pedido</span>
+              <span
+                style="color:rgba(255,255,255,0.3);font-size:10px;background:rgba(255,255,255,0.08);padding:2px 7px;border-radius:4px;">G</span>
+            </div>
+            <div
+              style="font-size:10px;color:rgba(255,255,255,0.35);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.06em;">
+              Ayuda</div>
+            <div
+              style="display:flex;align-items:center;justify-content:space-between;padding:7px 9px;border-radius:6px;margin-bottom:3px;">
+              <span style="color:rgba(255,255,255,0.5);font-size:12px;">Configuración</span>
+              <span
+                style="color:rgba(255,255,255,0.3);font-size:10px;background:rgba(255,255,255,0.08);padding:2px 7px;border-radius:4px;">C</span>
+            </div>
+            <div
+              style="display:flex;align-items:center;justify-content:space-between;padding:7px 9px;border-radius:6px;">
+              <span style="color:rgba(255,255,255,0.5);font-size:12px;">Contactar soporte</span>
+              <span
+                style="color:rgba(255,255,255,0.3);font-size:10px;background:rgba(255,255,255,0.08);padding:2px 7px;border-radius:4px;">H</span>
+            </div>
+          </div>
+        </div>
+        <h3 style="color:white;font-weight:600;font-size:14px;margin-bottom:8px;">Tú tienes el control</h3>
+        <p style="color:rgba(255,255,255,0.45);font-size:13px;line-height:1.6;">Atención rápida y personalizada.
+          Asesoría online y en nuestro taller. Accesos directos para todo. Modo oscuro incluido.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Conoce nuestros servicios (Meet Genius) -->
+  <section style="padding-bottom:160px;padding-left:40px;padding-right:40px;max-width:1280px;margin:0 auto;">
+    <div style="margin-bottom:56px;">
+      <h2 style="font-size:50px;font-weight:800;line-height:1.1;letter-spacing:-1px;color:white;margin-bottom:20px;">
+        Conoce nuestros<br>servicios especiales
+      </h2>
+      <p style="color:rgba(255,255,255,0.55);font-size:15px;line-height:1.75;max-width:520px;">
+        Nuestro equipo de técnicos expertos está diseñado para resolver cualquier incidencia tecnológica e <span
+          style="color:white;font-weight:600;" class="underline-accent">identificar las mejores soluciones</span> para
+        tu negocio o hogar.
+      </p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+
+      <!-- Servicio técnico (Smart forecasting) -->
+      <div class="card" style="padding:20px;">
+        <div id="slider-tecnico"
+          style="border-radius:10px;overflow:hidden;margin-bottom:20px;height:220px;background:#1a1a1a;position:relative;">
+          <img src="fotos/tecnico1.png" alt="Servicio Técnico 1"
+            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:1;transition:opacity 0.8s ease;">
+          <img src="fotos/tecnico2.png" alt="Servicio Técnico 2"
+            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.8s ease;">
+          <img src="fotos/tecnico3.png" alt="Servicio Técnico 3"
+            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.8s ease;">
+          <img src="fotos/tecnico4.png" alt="Servicio Técnico 4"
+            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.8s ease;">
+          <img src="fotos/tecnico5.png" alt="Servicio Técnico 5"
+            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.8s ease;">
+
+        </div>
+        <script>
+          (function () {
+            const imgs = document.querySelectorAll('#slider-tecnico img');
+            let current = 0;
+            setInterval(function () {
+              imgs[current].style.opacity = '0';
+              current = (current + 1) % imgs.length;
+              imgs[current].style.opacity = '1';
+            }, 3000);
+          })();
+        </script>
+        <h3 style="color:white;font-weight:600;font-size:14px;margin-bottom:8px;">Servicio técnico avanzado</h3>
+        <p style="color:rgba(255,255,255,0.45);font-size:13px;line-height:1.6;">Aprovecha la experiencia de nuestros
+          técnicos para mantener tus equipos en perfecto estado y anticipar problemas antes de que ocurran.</p>
+      </div>
+
+      <!-- Asesoría personalizada (Chat with Genius) -->
+      <div class="card" style="padding:20px;">
+        <div
+          style="border-radius:10px;overflow:hidden;margin-bottom:20px;height:220px;background:#0d0d0d;display:flex;flex-direction:column;justify-content:center;padding:20px;gap:14px;">
+          <div
+            style="align-self:flex-end;background:#0066ff;color:white;font-size:13px;padding:9px 15px;border-radius:18px;border-bottom-right-radius:4px;max-width:230px;line-height:1.4;">
+            ¡Hola! ¿En qué puedo ayudarte?
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:8px;">
+            <div
+              style="flex:1;background:#1a1a1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:9px 12px;font-size:12px;color:rgba(255,255,255,0.35);">
+              ¿Puedo permitirme un portátil nuevo de 1.200€?
+            </div>
+            <button
+              style="background:#1a1a1a;border:1px solid rgba(255,255,255,0.12);color:white;font-size:12px;padding:9px 14px;border-radius:8px;white-space:nowrap;cursor:pointer;">Preguntar</button>
+          </div>
+        </div>
+        <h3 style="color:white;font-weight:600;font-size:14px;margin-bottom:8px;">Asesoría personalizada</h3>
+        <p style="color:rgba(255,255,255,0.45);font-size:13px;line-height:1.6;">Pregunta lo que necesites. Con nuestro
+          equipo de asesores a tu lado, encontrar el equipo perfecto se vuelve intuitivo y sin esfuerzo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section style="padding:128px 24px;text-align:center;">
+    <h2
+      style="font-size:44px;font-weight:700;line-height:1.15;letter-spacing:-0.5px;color:white;max-width:640px;margin:0 auto 16px;">
+      Descubre hasta dónde puede llegar <span style="font-weight:400;">tu</span> tecnología.
+    </h2>
+    <p style="color:rgba(255,255,255,0.5);font-size:15px;margin-bottom:32px;">El primer paso para equiparte bien es el
+      último que tendrás que dar solo.</p>
+    <button class="hero-btn">Contactar ahora</button>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       FORMULARIO DE CONTACTO
+       Para activar el envío real:
+       1. Crea cuenta gratuita en https://formspree.io
+       2. Crea un nuevo formulario → introduce consulta@distritopc.com
+       3. Copia tu Form ID (ej: "xkgnpqrz") y sustitúyelo abajo en FORMSPREE_ID
+       ═══════════════════════════════════════════════════════ -->
+  <section id="contacto" style="padding:120px 24px;position:relative;overflow:hidden;">
+
+    <!-- Fondo gradiente sutil azul -->
+    <div
+      style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 50% 50%, rgba(0,80,255,0.22) 0%, transparent 70%);pointer-events:none;">
+    </div>
+
+    <div style="position:relative;z-index:1;max-width:700px;margin:0 auto;">
+
+      <!-- Encabezado -->
+      <div style="text-align:center;margin-bottom:52px;">
+        <span
+          style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(0,180,255,0.85);margin-bottom:16px;">Contacto</span>
+        <h2 style="font-size:46px;font-weight:800;line-height:1.08;letter-spacing:-1px;color:white;margin-bottom:16px;">
+          ¿Hablamos?</h2>
+        <p style="color:rgba(255,255,255,0.5);font-size:15px;line-height:1.75;max-width:400px;margin:0 auto;">
+          Cuéntanos qué necesitas. Nuestro equipo te responde en menos de 24&nbsp;horas.
+        </p>
+      </div>
+
+      <!-- Card del formulario -->
+      <div class="card" style="padding:40px;">
+        <form id="contactForm" novalidate autocomplete="on">
+
+          <!-- Honeypot: trampa para bots (invisible para humanos) -->
+          <div style="position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden;pointer-events:none;"
+            aria-hidden="true">
+            <input type="text" name="_honey" tabindex="-1" autocomplete="off" value="">
+          </div>
+
+          <!-- Nombre + Apellidos -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+            <div>
+              <label class="form-label" for="f_nombre">Nombre <span style="color:#ef4444;">*</span></label>
+              <input type="text" id="f_nombre" name="nombre" class="form-input" required maxlength="50"
+                placeholder="Tu nombre" autocomplete="given-name">
+              <span class="form-error" id="err_nombre"></span>
+            </div>
+            <div>
+              <label class="form-label" for="f_apellidos">Apellidos</label>
+              <input type="text" id="f_apellidos" name="apellidos" class="form-input" maxlength="100"
+                placeholder="Tus apellidos" autocomplete="family-name">
+            </div>
+          </div>
+
+          <!-- E-mail -->
+          <div style="margin-bottom:20px;">
+            <label class="form-label" for="f_email">E-mail <span style="color:#ef4444;">*</span></label>
+            <input type="email" id="f_email" name="email" class="form-input" required maxlength="100"
+              placeholder="tu@correo.com" autocomplete="email">
+            <span class="form-error" id="err_email"></span>
+          </div>
+
+          <!-- Provincia -->
+          <div style="margin-bottom:20px;">
+            <label class="form-label" for="f_provincia">Provincia <span style="color:#ef4444;">*</span></label>
+            <select id="f_provincia" name="provincia" class="form-input form-select" required
+              autocomplete="address-level1">
+              <option value="">Selecciona tu provincia</option>
+              <option>Álava</option>
+              <option>Albacete</option>
+              <option>Alicante</option>
+              <option>Almería</option>
+              <option>Asturias</option>
+              <option>Ávila</option>
+              <option>Badajoz</option>
+              <option>Baleares (Illes Balears)</option>
+              <option>Barcelona</option>
+              <option>Burgos</option>
+              <option>Cáceres</option>
+              <option>Cádiz</option>
+              <option>Cantabria</option>
+              <option>Castellón</option>
+              <option>Ceuta</option>
+              <option>Ciudad Real</option>
+              <option>Córdoba</option>
+              <option>Cuenca</option>
+              <option>Girona</option>
+              <option>Granada</option>
+              <option>Guadalajara</option>
+              <option>Gipuzkoa</option>
+              <option>Huelva</option>
+              <option>Huesca</option>
+              <option>Jaén</option>
+              <option>La Rioja</option>
+              <option>Las Palmas</option>
+              <option>León</option>
+              <option>Lleida</option>
+              <option>Lugo</option>
+              <option>Madrid</option>
+              <option>Málaga</option>
+              <option>Melilla</option>
+              <option>Murcia</option>
+              <option>Navarra</option>
+              <option>Ourense</option>
+              <option>Palencia</option>
+              <option>Pontevedra</option>
+              <option>Salamanca</option>
+              <option>Santa Cruz de Tenerife</option>
+              <option>Segovia</option>
+              <option>Sevilla</option>
+              <option>Soria</option>
+              <option>Tarragona</option>
+              <option>Teruel</option>
+              <option>Toledo</option>
+              <option>Valencia</option>
+              <option>Valladolid</option>
+              <option>Vizcaya (Bizkaia)</option>
+              <option>Zamora</option>
+              <option>Zaragoza</option>
+            </select>
+            <span class="form-error" id="err_provincia"></span>
+          </div>
+
+          <!-- Asunto -->
+          <div style="margin-bottom:20px;">
+            <label class="form-label" for="f_asunto">Asunto <span style="color:#ef4444;">*</span></label>
+            <input type="text" id="f_asunto" name="asunto" class="form-input" required maxlength="120"
+              placeholder="¿Sobre qué nos escribes?">
+            <span class="form-error" id="err_asunto"></span>
+          </div>
+
+          <!-- Descripción de consulta -->
+          <div style="margin-bottom:20px;">
+            <label class="form-label" for="f_descripcion">Descripción de consulta</label>
+            <textarea id="f_descripcion" name="descripcion" class="form-input form-textarea" maxlength="1000" rows="4"
+              placeholder="Cuéntanos más detalles (opcional)…"></textarea>
+            <span style="display:block;text-align:right;font-size:11px;color:rgba(255,255,255,0.2);margin-top:4px;"
+              id="charCount">0 / 1000</span>
+          </div>
+
+          <!-- Verificación anti-bot: captcha matemático -->
+          <div style="margin-bottom:20px;">
+            <label class="form-label">Verificación de seguridad <span style="color:#ef4444;">*</span></label>
+            <div
+              style="background:#0d0d0d;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:16px;">
+              <span
+                style="color:rgba(0,180,255,0.75);font-size:11px;font-weight:700;letter-spacing:0.1em;white-space:nowrap;">SYS_CHECK</span>
+              <span id="captchaText" style="color:rgba(255,255,255,0.75);font-size:14px;flex:1;"></span>
+              <input type="text" id="captchaInput" class="form-input" inputmode="numeric" maxlength="4"
+                placeholder="= ?" style="width:76px;text-align:center;padding:8px 10px;margin:0;">
+            </div>
+            <span class="form-error" id="err_captcha"></span>
+          </div>
+
+          <!-- LOPD: consentimiento obligatorio -->
+          <div style="margin-bottom:28px;">
+            <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;">
+              <input type="checkbox" id="f_lopd" name="lopd" required
+                style="margin-top:3px;width:16px;height:16px;min-width:16px;accent-color:#0066ff;cursor:pointer;">
+              <span style="color:rgba(255,255,255,0.45);font-size:13px;line-height:1.6;">
+                Acepto el tratamiento de mis datos personales por parte de Distrito PC con la única finalidad de atender
+                y responder a esta consulta, conforme a la
+                <a href="#" style="color:rgba(0,180,255,0.9);text-decoration:underline;">Política de Privacidad</a>.
+                <span style="color:#ef4444;">*</span>
+              </span>
+            </label>
+            <span class="form-error" id="err_lopd"></span>
+          </div>
+
+          <!-- Botón de envío -->
+          <button type="submit" id="submitBtn" class="submit-btn">
+            Enviar consulta &nbsp;→
+          </button>
+
+          <!-- Mensajes de resultado -->
+          <div id="formSuccess"
+            style="display:none;margin-top:20px;background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.2);border-radius:10px;padding:18px;text-align:center;">
+            <p style="color:#4ade80;font-size:14px;font-weight:500;margin:0;">✓ Mensaje enviado correctamente. Te
+              respondemos en menos de 24&nbsp;h.</p>
+          </div>
+          <div id="formError"
+            style="display:none;margin-top:20px;background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:18px;text-align:center;">
+            <p style="color:#f87171;font-size:14px;margin:0;">Ha ocurrido un error al enviar. Por favor, escríbenos
+              directamente a
+              <a href="mailto:consulta@distritopc.com"
+                style="color:#f87171;text-decoration:underline;">consulta@distritopc.com</a>
+            </p>
+          </div>
+
+        </form>
+      </div><!-- /card -->
+    </div><!-- /max-width -->
+  </section>
+
+  <script>
+    /* ── Configuración ─────────────────────────────────────────── */
+    const FORMSPREE_ID = 'xkokdypg'; // ← Reemplaza con tu ID de Formspree
+
+    /* ── Captcha matemático ────────────────────────────────────── */
+    let _captchaAnswer = 0;
+    function setupCaptcha() {
+      const a = Math.floor(Math.random() * 9) + 1;
+      const b = Math.floor(Math.random() * 9) + 1;
+      _captchaAnswer = a + b;
+      document.getElementById('captchaText').textContent = '¿Cuánto es ' + a + ' + ' + b + '?';
+      document.getElementById('captchaInput').value = '';
+    }
+    setupCaptcha();
+
+    /* ── Contador de caracteres en descripción ─────────────────── */
+    const descEl = document.getElementById('f_descripcion');
+    const charCount = document.getElementById('charCount');
+    descEl.addEventListener('input', () => {
+      charCount.textContent = descEl.value.length + ' / 1000';
+    });
+
+    /* ── Helpers de validación ─────────────────────────────────── */
+    function setError(fieldId, errId, msg) {
+      const el = document.getElementById(fieldId);
+      if (el) el.classList.toggle('input-error', !!msg);
+      document.getElementById(errId).textContent = msg || '';
+    }
+
+    function clearAllErrors() {
+      ['f_nombre', 'f_email', 'f_provincia', 'f_asunto', 'captchaInput'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('input-error');
+      });
+      document.querySelectorAll('.form-error').forEach(el => el.textContent = '');
+    }
+
+    /* ── Envío del formulario ──────────────────────────────────── */
+    let _lastSubmit = 0;
+
+    document.getElementById('contactForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      clearAllErrors();
+
+      /* Anti-flood: mínimo 30 s entre envíos */
+      const now = Date.now();
+      if (now - _lastSubmit < 30000) {
+        document.getElementById('err_captcha').textContent = 'Espera un momento antes de volver a enviar.';
+        return;
+      }
+
+      /* Honeypot: si el campo oculto tiene contenido, es un bot */
+      const honey = document.querySelector('input[name="_honey"]');
+      if (honey && honey.value) return;
+
+      let valid = true;
+
+      /* Nombre */
+      const nombre = document.getElementById('f_nombre').value.trim();
+      if (!nombre) {
+        setError('f_nombre', 'err_nombre', 'El nombre es obligatorio.');
+        valid = false;
+      }
+
+      /* E-mail con regex RFC-compatible */
+      const email = document.getElementById('f_email').value.trim();
+      const reMail = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+      if (!email) {
+        setError('f_email', 'err_email', 'El e-mail es obligatorio.');
+        valid = false;
+      } else if (!reMail.test(email)) {
+        setError('f_email', 'err_email', 'Introduce un e-mail con formato válido.');
+        valid = false;
+      }
+
+      /* Provincia */
+      const provincia = document.getElementById('f_provincia').value;
+      if (!provincia) {
+        setError('f_provincia', 'err_provincia', 'Selecciona tu provincia.');
+        valid = false;
+      }
+
+      /* Asunto */
+      const asunto = document.getElementById('f_asunto').value.trim();
+      if (!asunto) {
+        setError('f_asunto', 'err_asunto', 'El asunto es obligatorio.');
+        valid = false;
+      }
+
+      /* Captcha matemático */
+      const captchaRaw = document.getElementById('captchaInput').value.trim();
+      const captchaVal = parseInt(captchaRaw, 10);
+      if (!captchaRaw || isNaN(captchaVal) || captchaVal !== _captchaAnswer) {
+        setError('captchaInput', 'err_captcha', 'Respuesta incorrecta. Inténtalo de nuevo.');
+        setupCaptcha();
+        valid = false;
+      }
+
+      /* LOPD */
+      if (!document.getElementById('f_lopd').checked) {
+        document.getElementById('err_lopd').textContent = 'Debes aceptar el tratamiento de datos para continuar.';
+        valid = false;
+      }
+
+      if (!valid) return;
+
+      /* ── Estado de carga ── */
+      const btn = document.getElementById('submitBtn');
+      btn.textContent = 'Enviando…';
+      btn.disabled = true;
+      document.getElementById('formError').style.display = 'none';
+
+      const payload = {
+        nombre: nombre,
+        apellidos: document.getElementById('f_apellidos').value.trim(),
+        email: email,
+        provincia: provincia,
+        asunto: asunto,
+        descripcion: document.getElementById('f_descripcion').value.trim(),
+        _replyto: email,
+        _subject: '[DistritoPC] ' + asunto
+      };
+
+      try {
+        const res = await fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          _lastSubmit = Date.now();
+          document.getElementById('contactForm').querySelectorAll('input,select,textarea,button').forEach(el => {
+            el.disabled = true;
+          });
+          document.getElementById('formSuccess').style.display = 'block';
+          setupCaptcha();
+        } else {
+          throw new Error('server');
+        }
+      } catch (_) {
+        document.getElementById('formError').style.display = 'block';
+        btn.textContent = 'Enviar consulta →';
+        btn.disabled = false;
+        setupCaptcha();
+      }
+    });
+
+    /* ── Botones "Contactar" → scroll suave al formulario ─────── */
+    document.querySelectorAll('[data-contact]').forEach(el => {
+      el.addEventListener('click', () => {
+        document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+
+  <!-- Footer -->
+  <footer style="border-top:1px solid rgba(255,255,255,0.07);padding:32px 40px;">
+    <div style="max-width:1280px;margin:0 auto;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <p style="color:rgba(255,255,255,0.35);font-size:13px;">© 2026 Distrito PC</p>
+        <div style="display:flex;gap:24px;">
+          <a href="#" style="color:rgba(255,255,255,0.35);font-size:13px;text-decoration:none;">Política de
+            Privacidad</a>
+          <a href="#" style="color:rgba(255,255,255,0.35);font-size:13px;text-decoration:none;">Términos de Uso</a>
+        </div>
+        <div style="display:flex;gap:16px;align-items:center;">
+          <a href="#" style="color:rgba(255,255,255,0.4);">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+          </a>
+          <a href="#" style="color:rgba(255,255,255,0.4);">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+            </svg>
+          </a>
+          <a href="#" style="color:rgba(255,255,255,0.4);">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+            </svg>
+          </a>
+        </div>
+      </div>
+      <p style="color:rgba(255,255,255,0.2);font-size:12px;line-height:1.6;max-width:640px;">
+        Distrito PC es una marca registrada. Las demás marcas y logotipos pertenecen a sus respectivos propietarios. Los
+        servicios técnicos son prestados por profesionales certificados.
+      </p>
+    </div>
+  </footer>
+
+</body>
+
+</html>
