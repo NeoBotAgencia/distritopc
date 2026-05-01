@@ -204,6 +204,7 @@
           'rgba(37,99,235,VAL)'
         ];
         let dots = [];
+        let mouse = { x: -9999, y: -9999, active: false };
 
         function resize() {
           canvas.width = canvas.offsetWidth;
@@ -224,18 +225,98 @@
               vx: randomBetween(-0.4, 0.4),
               vy: randomBetween(-0.4, 0.4),
               r: randomBetween(1.5, 3),
-              color: color.replace('VAL', opacity)
+              color: color.replace('VAL', opacity),
+              fleeing: false
             });
           }
         }
 
+        canvas.parentElement.addEventListener('mousemove', function (e) {
+          const rect = canvas.getBoundingClientRect();
+          mouse.x = e.clientX - rect.left;
+          mouse.y = e.clientY - rect.top;
+          mouse.active = true;
+        });
+
+        canvas.parentElement.addEventListener('mouseleave', function () {
+          mouse.active = false;
+          dots.forEach(function (d) { d.fleeing = false; });
+        });
+
         function animate() {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           for (const d of dots) {
+            const dx = d.x - mouse.x;
+            const dy = d.y - mouse.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (mouse.active && !d.fleeing) {
+              // Atracción hacia el ratón
+              if (dist > 1) {
+                d.vx -= (dx / dist) * 0.07;
+                d.vy -= (dy / dist) * 0.07;
+              }
+              // Al tocar el ratón: invertir dirección a alta velocidad
+              if (dist < 8) {
+                const speed = Math.sqrt(d.vx * d.vx + d.vy * d.vy) || 1;
+                d.vx = (dx / dist) * speed * 12;
+                d.vy = (dy / dist) * speed * 12;
+                d.fleeing = true;
+              }
+            }
+
+            // Límite de velocidad
+            const maxSpeed = d.fleeing ? 18 : 2;
+            const spd = Math.sqrt(d.vx * d.vx + d.vy * d.vy);
+            if (spd > maxSpeed) {
+              d.vx = (d.vx / spd) * maxSpeed;
+              d.vy = (d.vy / spd) * maxSpeed;
+            }
+
+            // Fricción suave
+            d.vx *= 0.99;
+            d.vy *= 0.99;
+
+            // Si estaba huyendo y la velocidad ya bajó a rango normal: liberar
+            const minSpeed = 0.2;
+            const curSpd = Math.sqrt(d.vx * d.vx + d.vy * d.vy);
+            if (d.fleeing && curSpd < 1.5) {
+              d.fleeing = false;
+              const angle = Math.random() * Math.PI * 2;
+              d.vx = Math.cos(angle) * randomBetween(0.2, 0.4);
+              d.vy = Math.sin(angle) * randomBetween(0.2, 0.4);
+            }
+
+            // Velocidad mínima garantizada
+            if (curSpd < minSpeed) {
+              const angle = Math.random() * Math.PI * 2;
+              d.vx = Math.cos(angle) * minSpeed;
+              d.vy = Math.sin(angle) * minSpeed;
+            }
+
             d.x += d.vx;
             d.y += d.vy;
-            if (d.x < 0 || d.x > canvas.width) d.vx *= -1;
-            if (d.y < 0 || d.y > canvas.height) d.vy *= -1;
+
+            // Al rebotar en la pared: vuelve al movimiento normal
+            if (d.x < 0 || d.x > canvas.width) {
+              d.vx *= -1;
+              if (d.fleeing) {
+                d.fleeing = false;
+                const s = Math.sqrt(d.vx * d.vx + d.vy * d.vy);
+                d.vx = (d.vx / s) * randomBetween(0.2, 0.4);
+                d.vy = (d.vy / s) * randomBetween(0.2, 0.4);
+              }
+            }
+            if (d.y < 0 || d.y > canvas.height) {
+              d.vy *= -1;
+              if (d.fleeing) {
+                d.fleeing = false;
+                const s = Math.sqrt(d.vx * d.vx + d.vy * d.vy);
+                d.vx = (d.vx / s) * randomBetween(0.2, 0.4);
+                d.vy = (d.vy / s) * randomBetween(0.2, 0.4);
+              }
+            }
+
             ctx.beginPath();
             ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
             ctx.fillStyle = d.color;
